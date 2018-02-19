@@ -14,13 +14,11 @@ fastlane add_plugin localize
 
 Searches the code for extractable strings and allows interactive extraction to .strings file.
 
-**Note to author:** Add a more detailed description about this plugin here. If your plugin contains multiple actions, make sure to mention them here.
+![Example Gif](https://github.com/num42/fastlane-plugin-localize/raw/master/Localize.gif)
 
 ## Example
 
 Check out the [example `Fastfile`](fastlane/Fastfile) to see how to use this plugin. Try it by cloning the repo, running `fastlane install_plugins` and `bundle exec fastlane test`.
-
-![Example Gif](https://github.com/num42/fastlane-plugin-localize/raw/master/Localize.gif)
 
 ## Run tests for this plugin
 
