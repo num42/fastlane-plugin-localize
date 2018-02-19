@@ -14,6 +14,10 @@ fastlane add_plugin localize
 
 Searches the code for extractable strings and allows interactive extraction to .strings file.
 
+- Whitelists non-extracted strings for further runs
+- Extracts as NSLocalizedString by default
+- Support for [Swiftgen](https://github.com/SwiftGen/SwiftGen)
+
 ![Example Gif](https://github.com/num42/fastlane-plugin-localize/raw/master/Localize.gif)
 
 
