@@ -16,7 +16,7 @@ Searches the code for extractable strings and allows interactive extraction to .
 
 - Whitelists non-extracted strings for further runs
 - Extracts as NSLocalizedString by default
-- Support for [Swiftgen](https://github.com/SwiftGen/SwiftGen)
+- Support for [Swiftgen](https://github.com/SwiftGen/SwiftGen) by supplying use_swiftgen:true
 
 ![Example Gif](https://github.com/num42/fastlane-plugin-localize/raw/master/Localize.gif)
 
