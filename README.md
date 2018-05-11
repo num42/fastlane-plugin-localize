@@ -20,6 +20,32 @@ Searches the code for extractable strings and allows interactive extraction to .
 
 ![Example Gif](https://github.com/num42/fastlane-plugin-localize/raw/master/Localize.gif)
 
+## Run from Commandline
+
+To show all options:
+
+```bash
+fastlane action localize
+```
+
+Example:
+
+```bash
+fastlane run localize strings_file:"Sources/Base/Supporting Files/en.lproj/Localizable.strings" file_filter:"Swiftgen,Sourcery" use_swiftgen:"true"
+```
+
+## Run from Fastfile
+
+```ruby
+desc "Search for localizable strings"
+lane :localize_strings do
+  localize(
+    strings_file: "Sources/Base/Supporting Files/en.lproj/Localizable.strings",
+    file_filter: "Swiftgen,Sourcery", # filters files with these words in their path
+    use_swiftgen: "true" # remove to use NSLocalizableString instead
+  )
+end
+```
 
 ## Run tests for this plugin
 
