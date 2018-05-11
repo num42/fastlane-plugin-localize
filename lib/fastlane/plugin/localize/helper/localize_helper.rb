@@ -60,7 +60,12 @@ module Fastlane
 
       def self.codeFiles(target, options)
 
-      filter = options[:file_filter].split(",")
+      if options[:file_filter].nil?
+        filter = []
+      else
+        filter = ( options[:file_filter]).split(",")
+      end
+
 
        codeFiles = target.source_build_phase.files.to_a.map do |pbx_build_file|
   	       pbx_build_file.file_ref.real_path.to_s
