@@ -6,7 +6,8 @@ module Fastlane
     class LocalizeAction < Action
       def self.run(params)
         project = Helper::LocalizeHelper.getProject(params)
-        target = Helper::LocalizeHelper.getTarget(project)
+
+        target = Helper::LocalizeHelper.getTarget(params)
 
         files = Helper::LocalizeHelper.codeFiles(target, params)
 
@@ -72,6 +73,12 @@ module Fastlane
                                      is_string: true, # true: verifies the input is a string, false: every kind of value
                                      default_value: Helper::LocalizeHelper.getProject(nil).path # the default value if the user didn't provide one
                                    ),
+         FastlaneCore::ConfigItem.new(key: :localize_target,
+                                    env_name: "FL_LOCALIZE_TARGET", # The name of the environment variable
+                                    description: "The target to localize", # a short description of this parameter
+                                    is_string: true, # true: verifies the input is a string, false: every kind of value
+                                    default_value: Helper::LocalizeHelper.getTargetName(nil) # the default value if the user didn't provide one
+                                  ),
           FastlaneCore::ConfigItem.new(key: :use_swiftgen,
                                        env_name: "FL_LOCALIZE_USE_SWIFTGEN", # The name of the environment variable
                                        description: "Localize using Swiftgens L10n ", # a short description of this parameter

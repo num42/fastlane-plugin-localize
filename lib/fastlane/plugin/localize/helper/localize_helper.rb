@@ -9,8 +9,7 @@ module Fastlane
       # as `Helper::LocalizeHelper.your_method`
       #
 
-
-      def self.getProject(options)
+      def self.getProjectPath(options)
         projectPath = nil
 
         unless options.nil?
@@ -29,25 +28,43 @@ module Fastlane
           fail "no xcodeproject found"
         end
 
-        project = Xcodeproj::Project.open(projectPath)
+        projectPath
+      end
+
+      def self.getProject(options)
+
+        project = Xcodeproj::Project.open(self.getProjectPath(options))
 
         project
       end
 
-      def self.getTarget(project)
+      def self.getTargetName(options)
+        project = self.getProject(options)
+
         targetName = nil
 
-        # if options[:localize_target].nil?
-        #   targetName = ENV["TARGETNAME"]
-        # end
+        unless options.nil?
+          targetName = options[:localize_target]
+        end
 
         if targetName.nil?
-          targetName = project.targets.first.name
+          targetName = ENV["TARGET_NAME"]
+        end
+
+        if targetName.nil?
+          targetName = project.targets.map { |target| target.name.to_s }.first
         end
 
         if targetName.nil?
           fail "no target found"
         end
+
+        targetName
+      end
+
+      def self.getTarget(options)
+        project = self.getProject(options)
+        targetName = self.getTargetName(options)
 
         target = project.targets.select { |target| target.name.eql? targetName }.first
 
