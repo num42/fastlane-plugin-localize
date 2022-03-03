@@ -31,16 +31,20 @@ module Fastlane
           .reject { |match|
           whitelist.include? match
         }
-          .each { |match|
-          files.flat_map do |file|
-            Helper::LocalizeHelper.showStringOccurrencesFromFile(file, match)
-          end
-
-          if UI.confirm "Extract #{match}?"
-            key = UI.input "Enter key for localization:"
-            Helper::LocalizeHelper.localize_string(match, key, files, params)
+          .each { |match|			
+		  if params[:lint_only]
+			puts "warning: #{match} is not localized"
           else
-            Helper::LocalizeHelper.addToWhitelist(match)
+            files.flat_map do |file|
+              Helper::LocalizeHelper.showStringOccurrencesFromFile(file, match)
+            end
+          
+            if UI.confirm "Extract #{match}?"
+              key = UI.input "Enter key for localization:"
+              Helper::LocalizeHelper.localize_string(match, key, files, params)
+            else
+              Helper::LocalizeHelper.addToWhitelist(match)
+            end
           end
         }
       end
@@ -93,6 +97,12 @@ module Fastlane
                                        description: "Filter strings for file paths to ignore, separated by commas",
                                        optional: true,
                                        is_string: false),
+          FastlaneCore::ConfigItem.new(key: :lint_only,
+                                       env_name: "FL_LOCALIZE_LINT_ONLY", # The name of the environment variable
+                                       description: "Only lint and print warnings for unlocalized strings. ", # a short description of this parameter
+                                       is_string: false, # true: verifies the input is a string, false: every kind of value
+                                       default_value: false # the default value if the user didn't provide one
+            ),
         ]
       end
 
