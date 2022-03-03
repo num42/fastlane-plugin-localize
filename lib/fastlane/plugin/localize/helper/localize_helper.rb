@@ -155,7 +155,14 @@ module Fastlane
 
       def self.replacementString(key, params)
         if params[:use_swiftgen]
-          return "L10n.#{key.gsub(".", "_").split("_").inject { |m, p| m + p.capitalize }}"
+		  swiftgenKey = key.gsub(".", "_").split("_").inject { |m, p|
+			letters = p.split('')
+		    letters.first.upcase!
+		    p2 = letters.join
+          	m + p2
+          }
+          
+          return "L10n.#{swiftgenKey}"
         else
           return "NSLocalizedString(\"#{key}\")"
         end
