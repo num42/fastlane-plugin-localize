@@ -1,5 +1,5 @@
-require 'fastlane/action'
-require_relative '../helper/localize_helper'
+require "fastlane/action"
+require_relative "../helper/localize_helper"
 
 module Fastlane
   module Actions
@@ -15,7 +15,6 @@ module Fastlane
           Helper::LocalizeHelper.stringsFromFile(file)
         end
 
-
         matchHash = {}
 
         matches.each do |match|
@@ -23,18 +22,16 @@ module Fastlane
           matchHash[match[0]] << match
         end
 
-
         whitelist = Helper::LocalizeHelper.getWhitelist
 
         matchHash.keys
-        .map { |match|
+          .map { |match|
           match.gsub(/^\\"/, "\"").gsub(/\\"$/, "\"")
         }
-        .reject { |match|
+          .reject { |match|
           whitelist.include? match
         }
-        .each { |match|
-
+          .each { |match|
           files.flat_map do |file|
             Helper::LocalizeHelper.showStringOccurrencesFromFile(file, match)
           end
@@ -68,35 +65,34 @@ module Fastlane
       def self.available_options
         [
           FastlaneCore::ConfigItem.new(key: :localize_project,
-                                     env_name: "FL_LOCALIZE_PROJECT", # The name of the environment variable
-                                     description: "The project to localize", # a short description of this parameter
-                                     is_string: true, # true: verifies the input is a string, false: every kind of value
-                                     default_value: Helper::LocalizeHelper.getProject(nil).path # the default value if the user didn't provide one
-                                   ),
-         FastlaneCore::ConfigItem.new(key: :localize_target,
-                                    env_name: "FL_LOCALIZE_TARGET", # The name of the environment variable
-                                    description: "The target to localize", # a short description of this parameter
-                                    is_string: true, # true: verifies the input is a string, false: every kind of value
-                                    default_value: Helper::LocalizeHelper.getTargetName(nil) # the default value if the user didn't provide one
-                                  ),
+                                       env_name: "FL_LOCALIZE_PROJECT", # The name of the environment variable
+                                       description: "The project to localize", # a short description of this parameter
+                                       is_string: true, # true: verifies the input is a string, false: every kind of value
+                                       default_value: Helper::LocalizeHelper.getProject(nil).path # the default value if the user didn't provide one
+            ),
+          FastlaneCore::ConfigItem.new(key: :localize_target,
+                                       env_name: "FL_LOCALIZE_TARGET", # The name of the environment variable
+                                       description: "The target to localize", # a short description of this parameter
+                                       is_string: true, # true: verifies the input is a string, false: every kind of value
+                                       default_value: Helper::LocalizeHelper.getTargetName(nil) # the default value if the user didn't provide one
+            ),
           FastlaneCore::ConfigItem.new(key: :use_swiftgen,
                                        env_name: "FL_LOCALIZE_USE_SWIFTGEN", # The name of the environment variable
                                        description: "Localize using Swiftgens L10n ", # a short description of this parameter
                                        is_string: false, # true: verifies the input is a string, false: every kind of value
                                        default_value: false # the default value if the user didn't provide one
-                                      ),
+            ),
           FastlaneCore::ConfigItem.new(key: :strings_file,
                                        env_name: "FL_LOCALIZE_STRINGS_FILE",
                                        description: "The stringsfile to write to",
                                        is_string: true, # true: verifies the input is a string, false: every kind of value
                                        default_value: "Localizable.strings" # the default value if the user didn't provide one,
-                                     ),
-           FastlaneCore::ConfigItem.new(key: :file_filter,
-                                         env_name: "FL_LOCALIZE_FILE_FILTER",
-                                         description: "Filter strings for file paths to ignore, separated by commas",
-                                         optional: true,
-                                         is_string: false
-                                       )
+            ),
+          FastlaneCore::ConfigItem.new(key: :file_filter,
+                                       env_name: "FL_LOCALIZE_FILE_FILTER",
+                                       description: "Filter strings for file paths to ignore, separated by commas",
+                                       optional: true,
+                                       is_string: false),
         ]
       end
 

@@ -1,4 +1,4 @@
-require 'fastlane_core/ui/ui'
+require "fastlane_core/ui/ui"
 
 module Fastlane
   UI = FastlaneCore::UI unless Fastlane.const_defined?("UI")
@@ -21,7 +21,7 @@ module Fastlane
         end
 
         if projectPath.nil?
-          projectPath = Dir.entries('.').select { |f| f.end_with?(".xcodeproj") }.first
+          projectPath = Dir.entries(".").select { |f| f.end_with?(".xcodeproj") }.first
         end
 
         if projectPath.nil?
@@ -32,7 +32,6 @@ module Fastlane
       end
 
       def self.getProject(options)
-
         project = Xcodeproj::Project.open(self.getProjectPath(options))
 
         project
@@ -69,27 +68,25 @@ module Fastlane
         target = project.targets.select { |target| target.name.eql? targetName }.first
 
         if target.nil?
-          fail 'no target'
+          fail "no target"
         end
 
         target
       end
 
       def self.codeFiles(target, options)
+        if options[:file_filter].nil?
+          filter = []
+        else
+          filter = (options[:file_filter]).split(",")
+        end
 
-      if options[:file_filter].nil?
-        filter = []
-      else
-        filter = ( options[:file_filter]).split(",")
-      end
-
-
-       codeFiles = target.source_build_phase.files.to_a.map do |pbx_build_file|
-  	       pbx_build_file.file_ref.real_path.to_s
+        codeFiles = target.source_build_phase.files.to_a.map do |pbx_build_file|
+          pbx_build_file.file_ref.real_path.to_s
         end.select do |path|
-           path.end_with?(".swift")
+          path.end_with?(".swift")
         end.select do |path|
-           bool = true
+          bool = true
 
           filter.each { |filter|
             if path.include? filter
@@ -99,28 +96,24 @@ module Fastlane
 
           next bool
         end.select do |path|
-           File.exists?(path)
-       end
+          File.exists?(path)
+        end
 
         codeFiles
       end
 
       def self.stringsFromFile(file)
-
         strings = File.readlines(file).to_s.enum_for(:scan,
-          /(?<!\#imageLiteral\(resourceName:|\#imageLiteral\(resourceName: |NSLocalizedString\()\\"[^\\"\r\n]*\\"/
-        ).flat_map {Regexp.last_match}
+                                                     /(?<!\#imageLiteral\(resourceName:|\#imageLiteral\(resourceName: |NSLocalizedString\()\\"[^\\"\r\n]*\\"/).flat_map { Regexp.last_match }
         return strings
       end
 
       def self.showStringOccurrencesFromFile(file, string)
-
         line_array = File.readlines(file)
 
         File.open(file).each_with_index { |line, index|
           if line =~ /(?<!\#imageLiteral\(resourceName:|\#imageLiteral\(resourceName: |NSLocalizedString\()#{Regexp.escape(string)}/
-          then
-            hits = line_array[index-2 .. index-1] + [line_array[index].green] + line_array[index+1 .. index+2]
+            hits = line_array[index - 2..index - 1] + [line_array[index].green] + line_array[index + 1..index + 2]
             UI.message "In file #{file} (line #{index}): \n\n#{hits.join()}"
           end
         }
@@ -131,8 +124,8 @@ module Fastlane
       end
 
       def self.addToWhitelist(string)
-        open(whitelistFilename, 'a') { |f|
-            f.puts string
+        open(whitelistFilename, "a") { |f|
+          f.puts string
         }
         UI.message "Added \"#{string}\" to #{whitelistFilename}"
       end
@@ -146,15 +139,15 @@ module Fastlane
       end
 
       def self.localize_string(string, key, files, params)
-        open(params[:strings_file], 'a') { |f|
-            f.puts "\"#{key}\" = #{string};"
+        open(params[:strings_file], "a") { |f|
+          f.puts "\"#{key}\" = #{string};"
         }
         files.each do |file_name|
           text = File.read(file_name)
 
           new_contents = text.gsub(string, replacementString(key, params))
 
-          File.open(file_name, "w") {|file| file.puts new_contents }
+          File.open(file_name, "w") { |file| file.puts new_contents }
         end
 
         UI.message "Replaced \"#{string}\" with \"#{replacementString(key, params)}\""
@@ -162,7 +155,7 @@ module Fastlane
 
       def self.replacementString(key, params)
         if params[:use_swiftgen]
-          return "L10n.#{key.gsub("." , "_").split("_").inject { |m, p| m + p.capitalize }}"
+          return "L10n.#{key.gsub(".", "_").split("_").inject { |m, p| m + p.capitalize }}"
         else
           return "NSLocalizedString(\"#{key}\")"
         end

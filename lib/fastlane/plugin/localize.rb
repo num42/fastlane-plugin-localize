@@ -1,10 +1,10 @@
-require 'fastlane/plugin/localize/version'
+require "fastlane/plugin/localize/version"
 
 module Fastlane
   module Localize
     # Return all .rb files inside the "actions" and "helper" directory
     def self.all_classes
-      Dir[File.expand_path('**/{actions,helper}/*.rb', File.dirname(__FILE__))]
+      Dir[File.expand_path("**/{actions,helper}/*.rb", File.dirname(__FILE__))]
     end
   end
 end
