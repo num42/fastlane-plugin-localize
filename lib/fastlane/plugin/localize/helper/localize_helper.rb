@@ -118,7 +118,7 @@ module Fastlane
         line_array = File.readlines(file)
 
         File.open(file).each_with_index { |line, index|
-          if line =~ /(?<!\#imageLiteral\(resourceName:|\#imageLiteral\(resourceName: |NSLocalizedString\()#{string}/
+          if line =~ /(?<!\#imageLiteral\(resourceName:|\#imageLiteral\(resourceName: |NSLocalizedString\()#{Regexp.escape(string)}/
           then
             hits = line_array[index-2 .. index-1] + [line_array[index].green] + line_array[index+1 .. index+2]
             UI.message "In file #{file} (line #{index}): \n\n#{hits.join()}"
