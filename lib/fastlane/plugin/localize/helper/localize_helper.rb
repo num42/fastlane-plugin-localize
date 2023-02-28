@@ -96,7 +96,7 @@ module Fastlane
 
           next bool
         end.select do |path|
-          File.exists?(path)
+          File.exist?(path)
         end
 
         codeFiles
